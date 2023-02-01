@@ -5,7 +5,7 @@ namespace WPF.Reader.Service
 {
     public class LibraryService
     {
-        // A remplacer avec vos propre données !!!!!!!!!!!!!!
+        // A remplacer avec vos propres données !!!!!!!!!!!!!!
         // Pensé qu'il ne faut mieux ne pas réaffecter la variable Books, mais juste lui ajouter et / ou enlever des éléments
         // Donc pas de LibraryService.Instance.Books = ...
         // mais plutot LibraryService.Instance.Books.Add(...)
