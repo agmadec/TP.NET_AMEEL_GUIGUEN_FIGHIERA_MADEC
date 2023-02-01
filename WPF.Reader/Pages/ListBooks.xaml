@@ -11,6 +11,16 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ListBooks">
     <StackPanel>
+        <ListBox x:Name="Liste_des_livres" Height="100" d:ItemsSource="{d:Binding Books}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Title}" />
+                        <TextBlock Text="{Binding Content}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <!-- 
             A vous de créer la liste avec le bon binding. Une <ListBox> fera l'affaire 
             La propriété ItemsSource doit pointé vers la propiété Books de votre dataContext actuelle 

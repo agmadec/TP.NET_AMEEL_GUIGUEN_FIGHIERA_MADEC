@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -15,6 +16,7 @@ namespace WPF.Reader.ViewModel
 
         // n'oublier pas faire de faire le binding dans ListBook.xaml !!!!
         public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
+
 
         public ListBook()
         {
