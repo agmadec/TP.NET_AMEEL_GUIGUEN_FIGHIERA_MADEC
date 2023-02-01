@@ -6,12 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASP.Server.Controllers
 {
     public class CreateGenreModel
     {
-        public string Name { get; set; }
+        [Required]
+        [Key]
+        public string Name { get; set; } = "";
         public List<int> Books { get; set; }
         public IEnumerable<Book> AllBooks { get; set; }
     }
@@ -33,7 +36,25 @@ namespace ASP.Server.Controllers
 
         public ActionResult<CreateGenreModel> Create(CreateGenreModel genre)
         {
-            return View(new CreateGenreModel() { AllBooks = libraryDbContext.Books.ToList() });
+            if (ModelState.IsValid)
+            {
+                libraryDbContext.Add(new Genre() { Name = genre.Name });
+                libraryDbContext.SaveChanges();
+            }
+            return View(new CreateGenreModel());
+
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(List));
+            }
+            Genre genreToDelete = libraryDbContext.Genre.Where(genre => genre.Id == id).First();
+            libraryDbContext.Remove(genreToDelete);
+            libraryDbContext.SaveChanges();
+            return RedirectToAction(nameof(List));
         }
     }
 }
