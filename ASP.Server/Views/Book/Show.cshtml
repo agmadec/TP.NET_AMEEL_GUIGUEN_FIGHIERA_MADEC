@@ -11,8 +11,7 @@
             <p>@genre.Name</p>
         }
     <h3>@Model.Price €</h3>
-    <p>@Model.Content</p>
-    <iframe src="@Model.Content"></iframe>
+    <p>@Html.Raw(Model.Content)</p>
     
     
 </div>
