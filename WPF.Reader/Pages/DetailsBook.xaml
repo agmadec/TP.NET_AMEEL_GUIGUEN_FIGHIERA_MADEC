@@ -9,16 +9,44 @@
       d:DesignHeight="450" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance Type=vm:InDesignDetailsBook, d:IsDesignTimeCreatable=True}"
       Title="DetailsBook">
-
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="80" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
-        <Label Content="{Binding CurrentBook.Title}"/>
-        <Label Content="{Binding CurrentBook.Author}"/>
-        <Label Content="{Binding CurrentBook.Genres}"/>
-        <Label Content="{Binding CurrentBook.Price}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Vertical">
+            <Viewbox Height="75">
+                <Label Content="{Binding CurrentBook.Title}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+            </Viewbox>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Auteur : " FontWeight="Bold"/>
+                <Label Content="{Binding CurrentBook.Author}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Genres : " FontWeight="Bold"/>
+                <ItemsControl ItemsSource="{Binding CurrentBook.Genres}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                            <Label Content="{Binding Name}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <Label Content="{Binding CurrentBook.Price}" ContentStringFormat="{}{0:0.00} €"/>
+        </StackPanel>
+        <Button Command="{Binding ReadCommand}" CommandParameter="{Binding CurrentBook}" Grid.Column="1" Grid.Row="2" Content="Lire le livre" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Margin="0,0,0,27" Grid.ColumnSpan="2"/>
         <!-- il faut afficher les information du livre: Nom, Auteur, Prix, Genres-->
         <!-- Mais pas le contenu ! -->
         <!-- N'oublier pas le bouton pour aller lire le livre. La commande ReadCommand est faite pour ca ! -->
