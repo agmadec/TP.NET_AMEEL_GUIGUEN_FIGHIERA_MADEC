@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -14,13 +13,14 @@ namespace WPF.Reader.ViewModel
 
         public ICommand ItemSelectedCommand { get; set; }
 
-        // n'oublier pas faire de faire le binding dans ListBook.xaml !!!!
         public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
 
 
         public ListBook()
         {
-            ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });
+            ItemSelectedCommand = new RelayCommand(book => {
+                Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(book);
+            });
         }
     }
 }

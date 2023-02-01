@@ -5,18 +5,33 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPF.Reader.Pages"
       xmlns:vm="clr-namespace:WPF.Reader.ViewModel"
-      xmlns:model="clr-namespace:WPF.Reader.Model"
+      xmlns:model="clr-namespace:WPF.Reader.Model" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       d:DataContext="{d:DesignInstance Type=vm:ListBook, d:IsDesignTimeCreatable=True}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ListBooks">
     <StackPanel>
-        <ListBox x:Name="Liste_des_livres" Height="100" d:ItemsSource="{d:Binding Books}">
+        <ListBox x:Name="Liste_des_livres" Height="100" ItemsSource="{Binding Books}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ItemSelectedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Title}" />
-                        <TextBlock Text="{Binding Content}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding Author}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding Genres}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
