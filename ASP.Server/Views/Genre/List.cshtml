@@ -9,8 +9,21 @@
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
     @foreach (var genre in Model)
     {
-        <p>@genre.Name</p>
+        <tr>
+            <td>
+
+                <p>@genre.Name</p>
+                
+            </td>
+            <td>
+                <form asp-controller="Genre" asp-action="Delete">
+                    <button type="submit" value="@genre.Id" name="id">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        
     }
+    
 </div>
 
 
