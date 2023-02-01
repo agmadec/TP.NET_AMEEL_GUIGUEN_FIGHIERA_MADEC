@@ -102,7 +102,7 @@ namespace ASP.Server.Controllers
             return View(book);
         }
 
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, string? author = null)
         {
             if(id == null)
             {
@@ -111,7 +111,12 @@ namespace ASP.Server.Controllers
             Book bookToDelete = libraryDbContext.Books.Where(book => book.Id == id).First();
             libraryDbContext.Remove(bookToDelete);
             libraryDbContext.SaveChanges();
+            if(author!=null)
+            {
+                return RedirectToAction(nameof(Showauteur), new {author = author});
+            }
             return RedirectToAction(nameof(List));
+
         }
 
         public ActionResult<ModifyBookModel> Modify(ModifyBookModel modifiedBook = null, int? id = null)
@@ -139,6 +144,16 @@ namespace ASP.Server.Controllers
             }
             ModifyBookModel test = new() { Id = (int)id, Author = book.Author, Title= book.Title , Price= book.Price, Content= book.Content, AllGenres = libraryDbContext.Genre.ToList(), Genres = genreIdList };
             return View(test);
+        }
+
+        public ActionResult<Book> Showauteur(string? author)
+        {
+            if (author == null)
+            {
+                return RedirectToAction(nameof(List));
+            }
+            var book = libraryDbContext.Books.Where(book => book.Author == author).Include(book => book.Genres).ToList();
+            return View(book);
         }
     }
 }
