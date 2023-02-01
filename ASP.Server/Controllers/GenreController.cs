@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace ASP.Server.Controllers
 {
+    public class CreateGenreModel
+    {
+        public string Name { get; set; }
+        public List<int> Books { get; set; }
+        public IEnumerable<Book> AllBooks { get; set; }
+    }
     public class GenreController : Controller
     {
         private readonly LibraryDbContext libraryDbContext;
@@ -19,5 +25,15 @@ namespace ASP.Server.Controllers
         }
 
         // A vous de faire comme BookController.List mais pour les genres !
+        public ActionResult<IEnumerable<Genre>> List(int offset = 0, int limit = 10, [FromQuery] List<int> genre = null)
+        {
+            List<Genre> ListGenres = libraryDbContext.Genre.ToList();
+            return View(ListGenres);
+        }
+
+        public ActionResult<CreateGenreModel> Create(CreateGenreModel genre)
+        {
+            return View(new CreateGenreModel() { AllBooks = libraryDbContext.Books.ToList() });
+        }
     }
 }

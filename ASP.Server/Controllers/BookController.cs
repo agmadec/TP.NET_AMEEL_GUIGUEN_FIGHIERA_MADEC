@@ -6,22 +6,48 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection.Metadata;
 
 namespace ASP.Server.Controllers
 {
     public class CreateBookModel
     {
+        [Display(Name = "Titre")]
         [Required]
-        [Display(Name = "Nom")]
-        public String Name { get; set; }
-
-        // Ajouter ici tous les champ que l'utilisateur devra remplir pour ajouter un livre
+        public string Title { get; set; }
+        [Required]
+        public string Author { get; set; }
+        [Required]
+        public float Price { get; set; } = 0F;
+        [Required]
+        public string Content { get; set; }
 
         // Liste des genres séléctionné par l'utilisateur
         public List<int> Genres { get; set; }
 
         // Liste des genres a afficher à l'utilisateur
         public IEnumerable<Genre> AllGenres { get; init;  }
+    }
+
+    public class ModifyBookModel
+    {
+        [Required]
+        public int Id { get; set; }
+        [Display(Name = "Titre")]
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public string Author { get; set; }
+        [Required]
+        public float Price { get; set; } = 0F;
+        [Required]
+        public string Content { get; set; }
+
+        // Liste des genres séléctionné par l'utilisateur
+        public List<int> Genres { get; set; }
+
+        // Liste des genres a afficher à l'utilisateur
+        public IEnumerable<Genre> AllGenres { get; init; }
     }
 
     public class BookController : Controller
@@ -33,11 +59,21 @@ namespace ASP.Server.Controllers
             this.libraryDbContext = libraryDbContext;
         }
 
-        public ActionResult<IEnumerable<Book>> List()
+        public ActionResult<IEnumerable<Book>> List( [FromQuery] int offset = 0, [FromQuery] int limit = 10, [FromQuery] List<int> genre = null)
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
-            List<Book> ListBooks = null;
-            return View(ListBooks);
+            var books = libraryDbContext.Books
+                .Include(book => book.Genres)
+                .OrderBy(book => book.Id)
+                .Skip(offset)
+                .Take(limit)
+                .Select(book => new BookWithoutContent { book = book });
+            if (genre != null)
+            {
+                books.Where(book => genre == null || book.Genres.Any(g => genre.Contains(g.Id)));
+            }
+            List<BookWithoutContent> bookList = books.ToList();
+            return View(bookList);
         }
 
         public ActionResult<CreateBookModel> Create(CreateBookModel book)
@@ -46,14 +82,63 @@ namespace ASP.Server.Controllers
             if (ModelState.IsValid)
             {
                 // Il faut intéroger la base pour récupérer l'ensemble des objets genre qui correspond aux id dans CreateBookModel.Genres
-                List<Genre> genres = null;
+                List<Genre> genres = libraryDbContext.Genre.Where(genre => book.Genres.Contains(genre.Id)).ToList();
                 // Completer la création du livre avec toute les information nécéssaire que vous aurez ajoutez, et metter la liste des gener récupéré de la base aussi
-                libraryDbContext.Add(new Book() {  });
+                libraryDbContext.Add(new Book() { Author = book.Author, Title = book.Title, Price = book.Price, Content = book.Content, Genres = genres });
                 libraryDbContext.SaveChanges();
             }
 
             // Il faut interoger la base pour récupérer tous les genres, pour que l'utilisateur puisse les slécétionné
-            return View(new CreateBookModel() { AllGenres = null } );
+            return View(new CreateBookModel() { AllGenres = libraryDbContext.Genre.ToList() } );
+        }
+
+        public ActionResult<Book> Show(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(List));
+            }
+            Book book = libraryDbContext.Books.Where(book => book.Id == id).Include(book => book.Genres).First();
+            return View(book);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if(id == null)
+            {
+                return RedirectToAction(nameof(List));
+            }
+            Book bookToDelete = libraryDbContext.Books.Where(book => book.Id == id).First();
+            libraryDbContext.Remove(bookToDelete);
+            libraryDbContext.SaveChanges();
+            return RedirectToAction(nameof(List));
+        }
+
+        public ActionResult<ModifyBookModel> Modify(ModifyBookModel modifiedBook = null, int? id = null)
+        {
+            if (id == null) return RedirectToAction(nameof(List));
+            if (ModelState.IsValid)
+            {
+                List<Genre> genres = libraryDbContext.Genre.Where(genre => modifiedBook.Genres.Contains(genre.Id)).ToList();
+                var bookToModify = libraryDbContext.Books.Include(book => book.Genres).First(b => b.Id == modifiedBook.Id);
+                bookToModify.Title = modifiedBook.Title;
+                bookToModify.Author = modifiedBook.Author;
+                bookToModify.Price = modifiedBook.Price;
+                bookToModify.Content = modifiedBook.Content;
+                bookToModify.Genres.Clear();
+                bookToModify.Genres = genres;
+                libraryDbContext.Update(bookToModify);
+                libraryDbContext.SaveChanges();
+                return RedirectToAction(nameof(Show),new { id = modifiedBook.Id });
+            }
+            Book book = libraryDbContext.Books.Where(book => book.Id == id).Include(book => book.Genres).First();
+            List<int> genreIdList= new List<int>();
+            foreach (Genre genre in book.Genres)
+            {
+                genreIdList.Add(genre.Id);
+            }
+            ModifyBookModel test = new() { Id = (int)id, Author = book.Author, Title= book.Title , Price= book.Price, Content= book.Content, AllGenres = libraryDbContext.Genre.ToList(), Genres = genreIdList };
+            return View(test);
         }
     }
 }

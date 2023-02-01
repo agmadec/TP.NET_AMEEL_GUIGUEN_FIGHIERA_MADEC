@@ -56,9 +56,38 @@ namespace ASP.Server.Api
 
 
         // Je vous montre comment faire la 1er, a vous de la compléter et de faire les autres !
-        public ActionResult<List<Book>> GetBooks()
+        public ActionResult<List<BookWithoutContent>> GetBooks(int offset = 0, int limit = 10, [FromQuery] List<int> genre = null)
         {
-            throw new NotImplementedException("You have to do it your self");
+            var books = libraryDbContext.Books
+                .Include(book => book.Genres)
+                .OrderBy(book => book.Id)
+                .Skip(offset)
+                .Take(limit)
+                .Select(book => new BookWithoutContent { book = book });
+            if (genre != null)
+            {
+                books.Where(book => genre == null || book.Genres.Any(g => genre.Contains(g.Id)));
+            }
+            List<BookWithoutContent> bookList = books.ToList();
+            return bookList;
+        }
+
+        public ActionResult<Book> GetBook(int id)
+        {
+            try
+            {
+                var book = libraryDbContext.Books.Where(book => book.Id == id).Include(book => book.Genres).First();
+                return book;
+            }
+            catch (Exception)
+            {
+                return NotFound("Deso bb j'ai pas trouvé");
+            }
+        }
+
+        public ActionResult<List<Genre>> GetGenres()
+        {
+            return libraryDbContext.Genre.ToList();
         }
 
     }
