@@ -14,7 +14,7 @@
         <ListBox x:Name="Liste_des_livres" Height="100" ItemsSource="{Binding Books}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding ItemSelectedCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=Liste_des_livres, Path=SelectedItem}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListBox.ItemTemplate>
