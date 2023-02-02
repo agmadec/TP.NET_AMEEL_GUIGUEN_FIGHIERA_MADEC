@@ -111,6 +111,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="JsonSubTypes" Version="1.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.2" />
@@ -123,6 +124,8 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.18.2" />
+    <PackageReference Include="Polly" Version="7.2.3" />
+    <PackageReference Include="RestSharp" Version="108.0.2" />
     <PackageReference Include="Syncfusion.EJ2.MVC5" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Licensing" Version="20.4.0.44" />
     <PackageReference Include="TinyMCE" Version="6.3.1" />

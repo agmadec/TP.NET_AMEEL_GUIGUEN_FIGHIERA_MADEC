@@ -39,6 +39,14 @@
 </style>
 <div class="listeBooks">
     <h1>Liste des livres:</h1>
+    <select onchange="ChangeLimit(event)">
+        <option value="5" label="5"></option>
+        <option value="10" label="10" selected="selected"></option>
+        <option value="15" label="15"></option>
+        <option value="20" label="20"></option>
+        <option value="50" label="50"></option>
+        <option value="100" label="100"></option>
+    </select>
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
     <table>
         <thead>
@@ -89,3 +97,9 @@
         </tbody>
     </table>
 </div>
+<script>
+    function ChangeLimit(event){
+        var limit = event.target.value;
+        window.location.href = "/Book/List?limit="+limit;
+    }
+</script>

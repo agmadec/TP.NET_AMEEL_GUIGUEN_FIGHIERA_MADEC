@@ -23,6 +23,7 @@ namespace WPF.Reader.ViewModel
 
         public DetailsBook(Book book)
         {
+            if (book == null) return;
             CurrentBook = book;
             string sansBalises = Regex.Replace(book.Content, "<[^>]*>", string.Empty);
             string[] mots = sansBalises.Split(' ');

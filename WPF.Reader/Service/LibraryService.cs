@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Xml.Linq;
+using WPF.Reader.Api;
 using WPF.Reader.Model;
+using WPF.Reader.Pages;
 
 namespace WPF.Reader.Service
 {
@@ -12,16 +15,16 @@ namespace WPF.Reader.Service
         // Donc pas de LibraryService.Instance.Books = ...
         // mais plutot LibraryService.Instance.Books.Add(...)
         // ou LibraryService.Instance.Books.Clear()
-        public ObservableCollection<Book> Local_Books { get; set; } = new ObservableCollection<Book>();
+        public ObservableCollection<BookWithoutContent> Local_Books { get; set; } = new ObservableCollection<BookWithoutContent>();
 
         public ObservableCollection<Genre> Local_Genres { get; set; } = new ObservableCollection<Genre>();
 
-        public ObservableCollection<Book> Books { get; set; } = new();
+        public ObservableCollection<BookWithoutContent> Books { get; set; } = new();
         public ObservableCollection<Genre> Genres { get ; set; } = new();
 
         public LibraryService()
         {
-            Local_Genres = new ObservableCollection<Genre>() {
+            /*Local_Genres = new ObservableCollection<Genre>() {
             new Genre() { Id = 1, Name = "Science-Fiction" },
             new Genre() { Id = 2, Name = "Fantasy" },
             new Genre() { Id = 3, Name = "Aventure" },
@@ -45,7 +48,7 @@ namespace WPF.Reader.Service
             };
             Local_Books = new ObservableCollection<Book>()
             {
-                new Book()
+            new Book()
             {
                 Title= "Tom au pays des kangourous et Tom au pays des kangourous et Tom au pays des kangourous",
                 Author= "Håkan Nesser",
@@ -96,6 +99,7 @@ namespace WPF.Reader.Service
                 Author= "Albert Camus",
                 Price= 18,
                 Genres= new List<Genre>() { Local_Genres[6], Local_Genres[7] },
+                Content = "Maman est morte aujourd'hui. Peut-être hier. Ou alors demain ?"
             },
             new Book()
             {
@@ -203,7 +207,19 @@ namespace WPF.Reader.Service
                 Genres= new List<Genre>() { Local_Genres[4], Local_Genres[2] },
                 Content="<h1>Chapitre 1 : Le commencement</h1> <p>Il &eacute;tait une fois un jeune gar&ccedil;on nomm&eacute; Tom, qui vivait dans un petit village au bord de la for&ecirc;t. Un jour, en explorant la for&ecirc;t, Tom a d&eacute;couvert un arbre magique qui lui a accord&eacute; un v&oelig;u. Tom a souhait&eacute; devenir un h&eacute;ros pour aider les gens de son village.</p> <p>Le lendemain, Tom a &eacute;t&eacute; approch&eacute;"  }
 
-            };
+            };*/
+            BookApi bookApi = new BookApi();
+            var listBooks = bookApi.BookGetBooks();
+            var listGenres = bookApi.BookGetGenres();
+            foreach (var book in listBooks)
+            {
+                Local_Books.Add(book);
+            }
+            foreach (var genre in listGenres)
+            {
+                Local_Genres.Add(genre);
+            }
+            PopulateCollection();
         }
 
         public void PopulateCollection()
@@ -211,7 +227,7 @@ namespace WPF.Reader.Service
             Books.Clear();
             Genres.Clear();
 
-            foreach (Book book in Local_Books)
+            foreach (BookWithoutContent book in Local_Books)
             {
                 Books.Add(book);
             }
@@ -222,11 +238,19 @@ namespace WPF.Reader.Service
             }
         }
 
+        public Book GetBook(BookWithoutContent book)
+        {
+            BookApi bookApi = new();
+            return bookApi.BookGetBook(book.Id);
+        }
+
         public void BookByGenre(Genre genre)
         {
             Books.Clear();
+            BookApi bookApi = new();
+            var listBooks = bookApi.BookGetBooks(genre: new() { genre.Id });
 
-            foreach (var book in Local_Books)
+            foreach (var book in listBooks)
             {
                 if (book.Genres.Contains(genre))
                 {

@@ -15,7 +15,7 @@ namespace WPF.Reader.ViewModel
         public ICommand ItemSelectedCommand { get; set; }
         public ICommand GenreSelectedCommand { get; set; }
 
-        public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
+        public ObservableCollection<BookWithoutContent> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
         public ObservableCollection<Genre> Genres => Ioc.Default.GetRequiredService<LibraryService>().Genres;
 
         public int SelectedIndex { get; set; } = 0;
@@ -23,9 +23,10 @@ namespace WPF.Reader.ViewModel
 
         public ListBook()
         {
-            Ioc.Default.GetRequiredService<LibraryService>().PopulateCollection();
+            //Ioc.Default.GetRequiredService<LibraryService>().PopulateCollection();
             ItemSelectedCommand = new RelayCommand(book => {
-                Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(book);
+                var newBook = Ioc.Default.GetService<LibraryService>().GetBook((BookWithoutContent)book);
+                Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(newBook);
             });
             GenreSelectedCommand = new RelayCommand(genre =>
             {

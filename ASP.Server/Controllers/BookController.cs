@@ -64,14 +64,15 @@ namespace ASP.Server.Controllers
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
             IQueryable<Book> books = libraryDbContext.Books
                 .Include(book => book.Genres)
-                .OrderBy(book => book.Id)
-                .Skip(offset)
-                .Take(limit);
+                .OrderBy(book => book.Id);
             if (genre != null && genre.Count > 0)
             {
                 var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
                 books = books.Where(book => book.Genres.Intersect(genres).Any());
             }
+            books = books
+                .Skip(offset)
+                .Take(limit);
             List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
             return View(bookList);
         }

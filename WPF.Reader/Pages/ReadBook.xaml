@@ -23,7 +23,7 @@
             <Label Content="{Binding CurrentBook.Title}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Viewbox>
         <!-- Ainsi que le contenu du livre ! -->
-        <WebBrowser Name="myWebBrowser" vm:WebBrowserHelper.Body="{Binding CurrentBook.Content}" Grid.Row="1" ></WebBrowser>
+        <WebBrowser Name="myWebBrowser" vm:WebBrowserHelper.Body="{Binding CurrentBook.Content}" Grid.Row="1"></WebBrowser>
 
         <Button Grid.Row="2" Command="{Binding Path=GoBack, Source={StaticResource ResourceKey=navigator}}" CommandParameter="LIST" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Content="Retourner au details" Margin="0,0,0,27"/>
     </Grid>

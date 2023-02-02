@@ -60,14 +60,15 @@ namespace ASP.Server.Api
         {
             IQueryable<Book> books = libraryDbContext.Books
                 .Include(book => book.Genres)
-                .OrderBy(book => book.Id)
-                .Skip(offset)
-                .Take(limit);
-            if (genre != null || genre.Count>0)
+                .OrderBy(book => book.Id);
+            if (genre != null && genre.Count>0)
             {
                 var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
                 books = books.Where(book => book.Genres.Intersect(genres).Any());
             }
+            books = books
+                .Skip(offset)
+                .Take(limit);
             List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
             return bookList;
         }
