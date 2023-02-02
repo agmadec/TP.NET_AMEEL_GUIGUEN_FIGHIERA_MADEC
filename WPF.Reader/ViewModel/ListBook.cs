@@ -23,7 +23,7 @@ namespace WPF.Reader.ViewModel
 
         public ListBook()
         {
-            //Ioc.Default.GetRequiredService<LibraryService>().PopulateCollection();
+            Ioc.Default.GetRequiredService<LibraryService>().PopulateCollection();
             ItemSelectedCommand = new RelayCommand(book => {
                 var newBook = Ioc.Default.GetService<LibraryService>().GetBook((BookWithoutContent)book);
                 Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(newBook);

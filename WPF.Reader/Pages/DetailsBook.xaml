@@ -52,7 +52,10 @@
                 <Label Content="Temps de lecture estimé :" FontWeight="Bold"/>
                 <Label Content="{Binding TempsDeLecture}"/>
             </StackPanel>
-            <Label Content="{Binding CurrentBook.Price}" ContentStringFormat="{}{0:0.00} €"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Prix :" FontWeight="Bold"/>
+                <Label Content="{Binding CurrentBook.Price}" ContentStringFormat="{}{0:0.00} €"/>
+            </StackPanel>
         </StackPanel>
         <Button Command="{Binding ReadCommand}" CommandParameter="{Binding CurrentBook}" Grid.Column="1" Grid.Row="2" Content="Lire le livre" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Margin="0,0,0,27" Grid.ColumnSpan="2"/>
         <!-- il faut afficher les information du livre: Nom, Auteur, Prix, Genres-->

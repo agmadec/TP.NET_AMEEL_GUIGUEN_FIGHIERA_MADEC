@@ -21,17 +21,27 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Title}" />
+                            <Label Content="{Binding Title}" />
                             <StackPanel Orientation="Horizontal">
                                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                             </StackPanel>
-                            <TextBlock Text="{Binding Author}" />
+                            <Label Content="{Binding Author}" />
                             <StackPanel Orientation="Horizontal">
                                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                             </StackPanel>
-                            <TextBlock Text="{Binding Genres}" />
                             <StackPanel Orientation="Horizontal">
-                                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                                <ItemsControl ItemsSource="{Binding Genres}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"></StackPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

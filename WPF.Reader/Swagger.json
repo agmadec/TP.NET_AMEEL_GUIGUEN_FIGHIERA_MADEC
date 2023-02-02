@@ -15,6 +15,24 @@
     "text/json"
   ],
   "paths": {
+    "/api/Book/GetNbBook": {
+      "get": {
+        "tags": [
+          "Book"
+        ],
+        "operationId": "Book_GetNbBook",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
     "/api/Book/GetBooks": {
       "get": {
         "tags": [

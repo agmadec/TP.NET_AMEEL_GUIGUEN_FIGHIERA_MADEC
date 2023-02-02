@@ -104,6 +104,23 @@ namespace WPF.Reader.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;Genre&gt;</returns>
         ApiResponse<List<Genre>> BookGetGenresWithHttpInfo(int operationIndex = 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>int</returns>
+        int BookGetNbBook(int operationIndex = 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of int</returns>
+        ApiResponse<int> BookGetNbBookWithHttpInfo(int operationIndex = 0);
         #endregion Synchronous Operations
     }
     /// <summary>
@@ -186,6 +203,28 @@ namespace WPF.Reader.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;Genre&gt;)</returns>
         System.Threading.Tasks.Task<ApiResponse<List<Genre>>> BookGetGenresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of int</returns>
+        System.Threading.Tasks.Task<int> BookGetNbBookAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (int)</returns>
+        System.Threading.Tasks.Task<ApiResponse<int>> BookGetNbBookWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
     /// <summary>
@@ -650,6 +689,112 @@ namespace WPF.Reader.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("BookGetGenres", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+            return localVarResponse;
+        }
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>int</returns>
+        public int BookGetNbBook(int operationIndex = 0)
+        {
+            WPF.Reader.Client.ApiResponse<int> localVarResponse = BookGetNbBookWithHttpInfo();
+            return localVarResponse.Data;
+        }
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of int</returns>
+        public WPF.Reader.Client.ApiResponse<int> BookGetNbBookWithHttpInfo(int operationIndex = 0)
+        {
+            WPF.Reader.Client.RequestOptions localVarRequestOptions = new WPF.Reader.Client.RequestOptions();
+            string[] _contentTypes = new string[] {
+            };
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+            var localVarContentType = WPF.Reader.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+            var localVarAccept = WPF.Reader.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+            localVarRequestOptions.Operation = "BookApi.BookGetNbBook";
+            localVarRequestOptions.OperationIndex = operationIndex;
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<int>("/api/Book/GetNbBook", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("BookGetNbBook", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+            return localVarResponse;
+        }
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of int</returns>
+        public async System.Threading.Tasks.Task<int> BookGetNbBookAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            WPF.Reader.Client.ApiResponse<int> localVarResponse = await BookGetNbBookWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="WPF.Reader.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (int)</returns>
+        public async System.Threading.Tasks.Task<WPF.Reader.Client.ApiResponse<int>> BookGetNbBookWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            WPF.Reader.Client.RequestOptions localVarRequestOptions = new WPF.Reader.Client.RequestOptions();
+            string[] _contentTypes = new string[] {
+            };
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+            var localVarContentType = WPF.Reader.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+            var localVarAccept = WPF.Reader.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+            localVarRequestOptions.Operation = "BookApi.BookGetNbBook";
+            localVarRequestOptions.OperationIndex = operationIndex;
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.GetAsync<int>("/api/Book/GetNbBook", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("BookGetNbBook", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

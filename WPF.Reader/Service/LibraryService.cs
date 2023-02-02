@@ -209,7 +209,8 @@ namespace WPF.Reader.Service
 
             };*/
             BookApi bookApi = new BookApi();
-            var listBooks = bookApi.BookGetBooks();
+            int nbBook = bookApi.BookGetNbBook();
+            var listBooks = bookApi.BookGetBooks(limit: nbBook);
             var listGenres = bookApi.BookGetGenres();
             foreach (var book in listBooks)
             {
@@ -240,12 +241,14 @@ namespace WPF.Reader.Service
 
         public Book GetBook(BookWithoutContent book)
         {
+            if (book == null) return null;
             BookApi bookApi = new();
             return bookApi.BookGetBook(book.Id);
         }
 
         public void BookByGenre(Genre genre)
         {
+            if (genre == null) return;
             Books.Clear();
             BookApi bookApi = new();
             var listBooks = bookApi.BookGetBooks(genre: new() { genre.Id });

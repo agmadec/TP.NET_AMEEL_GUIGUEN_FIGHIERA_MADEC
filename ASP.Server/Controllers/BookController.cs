@@ -74,6 +74,9 @@ namespace ASP.Server.Controllers
                 .Skip(offset)
                 .Take(limit);
             List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
+            ViewBag.Boooks = bookList;
+            ViewBag.NbBook = libraryDbContext.Books.ToList().Count();
+            ViewBag.Limit = limit;
             return View(bookList);
         }
 

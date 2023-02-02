@@ -1,5 +1,4 @@
 ﻿@using ASP.Server.Model
-@model IEnumerable<BookWithoutContent>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -39,14 +38,30 @@
 </style>
 <div class="listeBooks">
     <h1>Liste des livres:</h1>
-    <select onchange="ChangeLimit(event)">
+    @{
+        int limit = ViewBag.Limit;
+    }
+    <select onchange="ChangeLimit(event)" asp-for="@limit">
         <option value="5" label="5"></option>
-        <option value="10" label="10" selected="selected"></option>
+        <option value="10" label="10"></option>
         <option value="15" label="15"></option>
         <option value="20" label="20"></option>
         <option value="50" label="50"></option>
         <option value="100" label="100"></option>
     </select>
+    <p>@ViewBag.NbBook</p>
+    <div style="display: flex;justify-content: flex-end;">
+    @if (@ViewBag.NbBook > @ViewBag.limit)
+    {
+
+        <p>Page : </p>
+        int nbPage = (int)Math.Ceiling((float)ViewBag.NbBook / ViewBag.limit);
+        for (int i = 0; i < nbPage; i++)
+        {
+            <a href="/Book/List?offset=@(ViewBag.limit * i)&limit=@ViewBag.limit" style="margin-left: 5px;margin-right: 5px;">@(i+1)</a>
+        }
+        }
+    </div>
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
     <table>
         <thead>
