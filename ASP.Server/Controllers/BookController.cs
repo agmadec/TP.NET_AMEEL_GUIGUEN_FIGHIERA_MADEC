@@ -102,7 +102,7 @@ namespace ASP.Server.Controllers
             return View(book);
         }
 
-        public ActionResult Delete(int? id, string? author = null)
+        public ActionResult Delete(int? id, string? author = null, int? genre = 0)
         {
             if(id == null)
             {
@@ -111,7 +111,11 @@ namespace ASP.Server.Controllers
             Book bookToDelete = libraryDbContext.Books.Where(book => book.Id == id).First();
             libraryDbContext.Remove(bookToDelete);
             libraryDbContext.SaveChanges();
-            if(author!=null)
+            if (genre != null)
+            {
+                return RedirectToAction(nameof(List), new { genre = genre });
+            }
+            if (author!=null)
             {
                 return RedirectToAction(nameof(Showauteur), new {author = author});
             }

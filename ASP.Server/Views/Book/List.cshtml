@@ -80,6 +80,7 @@
                                 <button type="submit" value="@book.Id" name="id">Modifier</button>
                             </form>
                             <form asp-controller="Book" asp-action="Delete">
+                                <input type="hidden" value="@Context.Request.Query["genre"]" name="genre" />
                                 <button type="submit" value="@book.Id" name="id">Supprimer</button>
                             </form>
                         </td>
