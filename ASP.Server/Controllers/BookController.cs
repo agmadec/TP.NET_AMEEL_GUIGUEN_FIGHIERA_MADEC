@@ -62,17 +62,17 @@ namespace ASP.Server.Controllers
         public ActionResult<IEnumerable<Book>> List( [FromQuery] int offset = 0, [FromQuery] int limit = 10, [FromQuery] List<int> genre = null)
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
-            var books = libraryDbContext.Books
+            IQueryable<Book> books = libraryDbContext.Books
                 .Include(book => book.Genres)
                 .OrderBy(book => book.Id)
                 .Skip(offset)
-                .Take(limit)
-                .Select(book => new BookWithoutContent { book = book });
-            if (genre != null)
+                .Take(limit);
+            if (genre != null && genre.Count > 0)
             {
-                books.Where(book => genre == null || book.Genres.Any(g => genre.Contains(g.Id)));
+                var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
+                books = books.Where(book => book.Genres.Intersect(genres).Any());
             }
-            List<BookWithoutContent> bookList = books.ToList();
+            List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
             return View(bookList);
         }
 
