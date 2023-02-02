@@ -1,0 +1,82 @@
+﻿@using ASP.Server.Model
+@model List<Book>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    table {
+        border-spacing: 0px;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+        background-color: transparent; /* Change the background-color of table here */
+        text-align: center; /* Change the text-alignment of table here */
+    }
+
+    th {
+        font-weight: bold;
+        border: 1px solid #cccccc; /* Change the border-color of heading here */
+        padding: 8px;
+    }
+
+    td {
+        border: 1px solid #cccccc; /* Change the border-color of cells here */
+        padding: 8px;
+    }
+
+    thead {
+        color: green;
+    }
+
+    tbody {
+        color: blue;
+    }
+
+    tfoot {
+        color: red;
+    }
+</style>
+<div class="listeBooks">
+    <h1>Liste des livres :</h1>
+    <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Prix</th>
+                <th>Genres</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="/Book/show?id=@book.Id">
+                            @book.Title
+                        </a>
+                    </td>
+                    <td>@book.Author</td>
+                    <td>@book.Price €</td>
+                    <td>
+                        @foreach (Genre genre in book.Genres)
+                        {
+                            <span>@genre.Name</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-controller="Book" asp-action="Modify">
+                            <button type="submit" value="@book.Id" name="id">Modifier</button>
+                        </form>
+                        <form asp-controller="Book" asp-action="Delete">
+                            <input type="hidden" value="@book.Author" name="author"/>
+                            <button type="submit" value="@book.Id" name="id">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -62,17 +62,17 @@ namespace ASP.Server.Controllers
         public ActionResult<IEnumerable<Book>> List( [FromQuery] int offset = 0, [FromQuery] int limit = 10, [FromQuery] List<int> genre = null)
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
-            var books = libraryDbContext.Books
+            IQueryable<Book> books = libraryDbContext.Books
                 .Include(book => book.Genres)
                 .OrderBy(book => book.Id)
                 .Skip(offset)
-                .Take(limit)
-                .Select(book => new BookWithoutContent { book = book });
-            if (genre != null)
+                .Take(limit);
+            if (genre != null && genre.Count > 0)
             {
-                books.Where(book => genre == null || book.Genres.Any(g => genre.Contains(g.Id)));
+                var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
+                books = books.Where(book => book.Genres.Intersect(genres).Any());
             }
-            List<BookWithoutContent> bookList = books.ToList();
+            List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
             return View(bookList);
         }
 
@@ -102,7 +102,7 @@ namespace ASP.Server.Controllers
             return View(book);
         }
 
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, string? author = null, int? genre = 0)
         {
             if(id == null)
             {
@@ -111,7 +111,16 @@ namespace ASP.Server.Controllers
             Book bookToDelete = libraryDbContext.Books.Where(book => book.Id == id).First();
             libraryDbContext.Remove(bookToDelete);
             libraryDbContext.SaveChanges();
+            if (genre != null)
+            {
+                return RedirectToAction(nameof(List), new { genre = genre });
+            }
+            if (author!=null)
+            {
+                return RedirectToAction(nameof(Showauteur), new {author = author});
+            }
             return RedirectToAction(nameof(List));
+
         }
 
         public ActionResult<ModifyBookModel> Modify(ModifyBookModel modifiedBook = null, int? id = null)
@@ -139,6 +148,16 @@ namespace ASP.Server.Controllers
             }
             ModifyBookModel test = new() { Id = (int)id, Author = book.Author, Title= book.Title , Price= book.Price, Content= book.Content, AllGenres = libraryDbContext.Genre.ToList(), Genres = genreIdList };
             return View(test);
+        }
+
+        public ActionResult<Book> Showauteur(string? author)
+        {
+            if (author == null)
+            {
+                return RedirectToAction(nameof(List));
+            }
+            var book = libraryDbContext.Books.Where(book => book.Author == author).Include(book => book.Genres).ToList();
+            return View(book);
         }
     }
 }

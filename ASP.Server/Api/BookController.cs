@@ -58,17 +58,17 @@ namespace ASP.Server.Api
         // Je vous montre comment faire la 1er, a vous de la compléter et de faire les autres !
         public ActionResult<List<BookWithoutContent>> GetBooks(int offset = 0, int limit = 10, [FromQuery] List<int> genre = null)
         {
-            var books = libraryDbContext.Books
+            IQueryable<Book> books = libraryDbContext.Books
                 .Include(book => book.Genres)
                 .OrderBy(book => book.Id)
                 .Skip(offset)
-                .Take(limit)
-                .Select(book => new BookWithoutContent { book = book });
-            if (genre != null)
+                .Take(limit);
+            if (genre != null || genre.Count>0)
             {
-                books.Where(book => genre == null || book.Genres.Any(g => genre.Contains(g.Id)));
+                var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
+                books = books.Where(book => book.Genres.Intersect(genres).Any());
             }
-            List<BookWithoutContent> bookList = books.ToList();
+            List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
             return bookList;
         }
 
