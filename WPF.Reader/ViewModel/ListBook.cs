@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using WPF.Reader.Model;
 using WPF.Reader.Service;
+using System.Windows.Controls;
 
 namespace WPF.Reader.ViewModel
 {
@@ -12,13 +13,25 @@ namespace WPF.Reader.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand ItemSelectedCommand { get; set; }
+        public ICommand GenreSelectedCommand { get; set; }
 
-        // n'oublier pas faire de faire le binding dans ListBook.xaml !!!!
         public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
+        public ObservableCollection<Genre> Genres => Ioc.Default.GetRequiredService<LibraryService>().Genres;
+
+        public int SelectedIndex { get; set; } = 0;
+
 
         public ListBook()
         {
-            ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });
+            Ioc.Default.GetRequiredService<LibraryService>().PopulateCollection();
+            ItemSelectedCommand = new RelayCommand(book => {
+                Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(book);
+            });
+            GenreSelectedCommand = new RelayCommand(genre =>
+            {
+                Ioc.Default.GetRequiredService<LibraryService>().BookByGenre((Genre)genre);
+                SelectedIndex = 0;
+            });
         }
     }
 }
