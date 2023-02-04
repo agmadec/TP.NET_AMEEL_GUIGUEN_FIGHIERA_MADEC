@@ -69,13 +69,16 @@ namespace ASP.Server.Controllers
             {
                 var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
                 books = books.Where(book => book.Genres.Intersect(genres).Any());
+                ViewBag.NbBook = libraryDbContext.Books.Where(book => book.Genres.Intersect(genres).Any()).ToList().Count();
+            }else
+            {
+                ViewBag.NbBook = libraryDbContext.Books.ToList().Count();
             }
             books = books
                 .Skip(offset)
                 .Take(limit);
             List<BookWithoutContent> bookList = books.Select(book => new BookWithoutContent { book = book }).ToList();
             ViewBag.Boooks = bookList;
-            ViewBag.NbBook = libraryDbContext.Books.ToList().Count();
             ViewBag.Limit = limit;
             return View(bookList);
         }

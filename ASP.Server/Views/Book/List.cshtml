@@ -49,7 +49,6 @@
         <option value="50" label="50"></option>
         <option value="100" label="100"></option>
     </select>
-    <p>@ViewBag.NbBook</p>
     <div style="display: flex;justify-content: flex-end;">
     @if (@ViewBag.NbBook > @ViewBag.limit)
     {
@@ -58,9 +57,9 @@
         int nbPage = (int)Math.Ceiling((float)ViewBag.NbBook / ViewBag.limit);
         for (int i = 0; i < nbPage; i++)
         {
-            <a href="/Book/List?offset=@(ViewBag.limit * i)&limit=@ViewBag.limit" style="margin-left: 5px;margin-right: 5px;">@(i+1)</a>
+                <a href="#" data-offset="@(ViewBag.limit * i)" style="margin-left: 5px;margin-right: 5px;" onClick="ChangeOffset(event)">@(i + 1)</a>
         }
-        }
+    }
     </div>
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
     <table>
@@ -92,7 +91,7 @@
                         
                             @foreach (Genre genre in book.Genres)
                             {
-                                <a href="/Book/List?genre=@genre.Id">
+                            <a href="#" data-genre="@genre.Id" onClick="ChangeGenre(event)">
                                     <span>@genre.Name</span>
                                 </a>
                             }
@@ -113,8 +112,28 @@
     </table>
 </div>
 <script>
+    @{
+        var isGenre = Context.Request.Query.ContainsKey("genre");
+        var isOffset = Context.Request.Query.ContainsKey("offset");
+        var isLimit = Context.Request.Query.ContainsKey("limit");
+        String genreString = isGenre ? Context.Request.Query["genre"] : "";
+        String offsetString = isOffset ? Context.Request.Query["offset"] : "";
+        String limitString = isLimit ? Context.Request.Query["limit"] : "";
+    }
     function ChangeLimit(event){
         var limit = event.target.value;
-        window.location.href = "/Book/List?limit="+limit;
+        window.location.href = "/Book/List?genre=@genreString&offset=@offsetString&limit=" + limit;
+    }
+
+    function ChangeGenre(event){
+        event.preventDefault();
+        var genre = event.currentTarget.getAttribute("data-genre");
+        window.location.href = "/Book/List?genre="+ genre +"&offset=@offsetString&limit=@limitString";
+    }
+
+    function ChangeOffset(event){
+        event.preventDefault();
+        var offset = event.currentTarget.getAttribute("data-offset");
+        window.location.href = "/Book/List?genre=@genreString&offset="+ offset +"&limit=@limitString";
     }
 </script>
