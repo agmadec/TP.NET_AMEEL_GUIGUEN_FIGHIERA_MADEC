@@ -65,11 +65,11 @@
     <table>
         <thead>
             <tr>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Prix</th>
-                <th>Genres</th>
-                <th>Actions</th>
+                <th style="width: 40%">Titre</th>
+                <th style="width: 15%">Auteur</th>
+                <th style="width: 5%">Prix</th>
+                <th style="width: 30%">Genres</th>
+                <th style="width: 10%">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -122,13 +122,13 @@
     }
     function ChangeLimit(event){
         var limit = event.target.value;
-        window.location.href = "/Book/List?genre=@genreString&offset=@offsetString&limit=" + limit;
+        window.location.href = "/Book/List?genre=@genreString&offset=&limit=" + limit;
     }
 
     function ChangeGenre(event){
         event.preventDefault();
         var genre = event.currentTarget.getAttribute("data-genre");
-        window.location.href = "/Book/List?genre="+ genre +"&offset=@offsetString&limit=@limitString";
+        window.location.href = "/Book/List?genre="+ genre +"&offset=&limit=@limitString";
     }
 
     function ChangeOffset(event){

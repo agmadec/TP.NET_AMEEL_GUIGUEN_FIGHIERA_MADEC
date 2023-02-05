@@ -10,7 +10,7 @@ namespace ASP.Server.Model
         public string Title { get { return book.Title; } }
 
         public string Author { get { return book.Author; } }
-        
+
         public float Price { get { return book.Price; } }
 
         public List<Genre> Genres { get { return book.Genres; } }

@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ASP.Server.Database;
+using ASP.Server.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ASP.Server.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using ASP.Server.Database;
 
 namespace ASP.Server.Api
 {
@@ -32,7 +30,7 @@ namespace ASP.Server.Api
             IQueryable<Book> books = libraryDbContext.Books
                 .Include(book => book.Genres)
                 .OrderBy(book => book.Id);
-            if (genre != null && genre.Count>0)
+            if (genre != null && genre.Count > 0)
             {
                 var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
                 books = books.Where(book => book.Genres.Intersect(genres).Any());

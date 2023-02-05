@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ASP.Server.Database;
+﻿using ASP.Server.Database;
 using ASP.Server.Model;
-using System;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata;
 
 namespace ASP.Server.Controllers
 {
@@ -26,7 +24,7 @@ namespace ASP.Server.Controllers
         public List<int> Genres { get; set; }
 
         // Liste des genres a afficher à l'utilisateur
-        public IEnumerable<Genre> AllGenres { get; init;  }
+        public IEnumerable<Genre> AllGenres { get; init; }
     }
 
     public class ModifyBookModel
@@ -59,7 +57,7 @@ namespace ASP.Server.Controllers
             this.libraryDbContext = libraryDbContext;
         }
 
-        public ActionResult<IEnumerable<Book>> List( [FromQuery] int offset = 0, [FromQuery] int limit = 10, [FromQuery] List<int> genre = null)
+        public ActionResult<IEnumerable<Book>> List([FromQuery] int offset = 0, [FromQuery] int limit = 10, [FromQuery] List<int> genre = null)
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
             IQueryable<Book> books = libraryDbContext.Books
@@ -70,7 +68,8 @@ namespace ASP.Server.Controllers
                 var genres = libraryDbContext.Genre.Where(g => genre.Contains(g.Id));
                 books = books.Where(book => book.Genres.Intersect(genres).Any());
                 ViewBag.NbBook = libraryDbContext.Books.Where(book => book.Genres.Intersect(genres).Any()).ToList().Count();
-            }else
+            }
+            else
             {
                 ViewBag.NbBook = libraryDbContext.Books.ToList().Count();
             }
@@ -96,7 +95,7 @@ namespace ASP.Server.Controllers
             }
 
             // Il faut interoger la base pour récupérer tous les genres, pour que l'utilisateur puisse les slécétionné
-            return View(new CreateBookModel() { AllGenres = libraryDbContext.Genre.ToList() } );
+            return View(new CreateBookModel() { AllGenres = libraryDbContext.Genre.ToList() });
         }
 
         public ActionResult<Book> Show(int? id)
@@ -111,7 +110,7 @@ namespace ASP.Server.Controllers
 
         public ActionResult Delete(int? id, string? author = null, int? genre = 0)
         {
-            if(id == null)
+            if (id == null)
             {
                 return RedirectToAction(nameof(List));
             }
@@ -122,9 +121,9 @@ namespace ASP.Server.Controllers
             {
                 return RedirectToAction(nameof(List), new { genre = genre });
             }
-            if (author!=null)
+            if (author != null)
             {
-                return RedirectToAction(nameof(Showauteur), new {author = author});
+                return RedirectToAction(nameof(Showauteur), new { author = author });
             }
             return RedirectToAction(nameof(List));
 
@@ -145,15 +144,15 @@ namespace ASP.Server.Controllers
                 bookToModify.Genres = genres;
                 libraryDbContext.Update(bookToModify);
                 libraryDbContext.SaveChanges();
-                return RedirectToAction(nameof(Show),new { id = modifiedBook.Id });
+                return RedirectToAction(nameof(Show), new { id = modifiedBook.Id });
             }
             Book book = libraryDbContext.Books.Where(book => book.Id == id).Include(book => book.Genres).First();
-            List<int> genreIdList= new List<int>();
+            List<int> genreIdList = new List<int>();
             foreach (Genre genre in book.Genres)
             {
                 genreIdList.Add(genre.Id);
             }
-            ModifyBookModel test = new() { Id = (int)id, Author = book.Author, Title= book.Title , Price= book.Price, Content= book.Content, AllGenres = libraryDbContext.Genre.ToList(), Genres = genreIdList };
+            ModifyBookModel test = new() { Id = (int)id, Author = book.Author, Title = book.Title, Price = book.Price, Content = book.Content, AllGenres = libraryDbContext.Genre.ToList(), Genres = genreIdList };
             return View(test);
         }
 

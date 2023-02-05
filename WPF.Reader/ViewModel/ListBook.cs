@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Windows.Input;
 using WPF.Reader.Model;
 using WPF.Reader.Service;
-using System.Windows.Controls;
 
 namespace WPF.Reader.ViewModel
 {
@@ -24,7 +23,8 @@ namespace WPF.Reader.ViewModel
         public ListBook()
         {
             Ioc.Default.GetRequiredService<LibraryService>().PopulateCollection();
-            ItemSelectedCommand = new RelayCommand(book => {
+            ItemSelectedCommand = new RelayCommand(book =>
+            {
                 var newBook = Ioc.Default.GetService<LibraryService>().GetBook((BookWithoutContent)book);
                 Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(newBook);
             });

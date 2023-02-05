@@ -1,34 +1,26 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using OpenAPIDateConverter = WPF.Reader.Client.OpenAPIDateConverter;
 using Polly;
 using RestSharp;
 using RestSharp.Serializers;
-using RestSharpMethod = RestSharp.Method;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Reflection;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using WPF.Reader.Client;
 using WPF.Reader.Model;
+using RestSharpMethod = RestSharp.Method;
 /*
  * My Title
  *
@@ -1216,7 +1208,7 @@ namespace WPF.Reader.Client
             {
                 try
                 {
-                    response.Data = (T) typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
+                    response.Data = (T)typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
                 }
                 catch (Exception ex)
                 {
@@ -1299,7 +1291,7 @@ namespace WPF.Reader.Client
             // if the response type is oneOf/anyOf, call FromJSON to deserialize the data
             if (typeof(WPF.Reader.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
             {
-                response.Data = (T) typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
+                response.Data = (T)typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
             }
             else if (typeof(T).Name == "Stream") // for binary response
             {
@@ -1778,13 +1770,15 @@ namespace WPF.Reader.Client
             }
             else if (value is IDictionary dictionary)
             {
-                if(collectionFormat == "deepObject") {
+                if (collectionFormat == "deepObject")
+                {
                     foreach (DictionaryEntry entry in dictionary)
                     {
                         parameters.Add(name + "[" + entry.Key + "]", ParameterToString(entry.Value));
                     }
                 }
-                else {
+                else
+                {
                     foreach (DictionaryEntry entry in dictionary)
                     {
                         parameters.Add(entry.Key.ToString(), ParameterToString(entry.Value));
@@ -1923,7 +1917,7 @@ namespace WPF.Reader.Client
             var memInfo = enumType.GetMember(enumVal.ToString() ?? throw new InvalidOperationException());
             var attr = memInfo.FirstOrDefault()?.GetCustomAttributes(false).OfType<EnumMemberAttribute>().FirstOrDefault();
             if (attr != null) return true;
-                return false;
+            return false;
         }
         /// <summary>
         /// Get the EnumMember value
@@ -2084,7 +2078,8 @@ namespace WPF.Reader.Client
         /// <summary>
         /// Gets or sets the base path for API access.
         /// </summary>
-        public virtual string BasePath {
+        public virtual string BasePath
+        {
             get { return _basePath; }
             set { _basePath = value; }
         }
@@ -2388,7 +2383,7 @@ namespace WPF.Reader.Client
         {
             string report = "C# SDK (WPF.Reader) Debug Report:\n";
             report += "    OS: " + System.Environment.OSVersion + "\n";
-            report += "    .NET Framework Version: " + System.Environment.Version  + "\n";
+            report += "    .NET Framework Version: " + System.Environment.Version + "\n";
             report += "    Version of the API: 1.0.0\n";
             report += "    SDK Package Version: 1.0.0\n";
             return report;
@@ -3432,30 +3427,30 @@ namespace WPF.Reader.Model
             {
                 return false;
             }
-            return 
+            return
                 (
                     this.Id == input.Id ||
                     this.Id.Equals(input.Id)
-                ) && 
+                ) &&
                 (
                     this.Title == input.Title ||
                     (this.Title != null &&
                     this.Title.Equals(input.Title))
-                ) && 
+                ) &&
                 (
                     this.Author == input.Author ||
                     (this.Author != null &&
                     this.Author.Equals(input.Author))
-                ) && 
+                ) &&
                 (
                     this.Price == input.Price ||
                     this.Price.Equals(input.Price)
-                ) && 
+                ) &&
                 (
                     this.Content == input.Content ||
                     (this.Content != null &&
                     this.Content.Equals(input.Content))
-                ) && 
+                ) &&
                 (
                     this.Genres == input.Genres ||
                     this.Genres != null &&
@@ -3503,17 +3498,17 @@ namespace WPF.Reader.Model
             // Title (string) minLength
             if (this.Title != null && this.Title.Length < 1)
             {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Title, length must be greater than 1.", new [] { "Title" });
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Title, length must be greater than 1.", new[] { "Title" });
             }
             // Author (string) minLength
             if (this.Author != null && this.Author.Length < 1)
             {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Author, length must be greater than 1.", new [] { "Author" });
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Author, length must be greater than 1.", new[] { "Author" });
             }
             // Content (string) minLength
             if (this.Content != null && this.Content.Length < 1)
             {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Content, length must be greater than 1.", new [] { "Content" });
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Content, length must be greater than 1.", new[] { "Content" });
             }
             yield break;
         }
@@ -3633,30 +3628,30 @@ namespace WPF.Reader.Model
             {
                 return false;
             }
-            return 
+            return
                 (
                     this.Book == input.Book ||
                     (this.Book != null &&
                     this.Book.Equals(input.Book))
-                ) && 
+                ) &&
                 (
                     this.Id == input.Id ||
                     this.Id.Equals(input.Id)
-                ) && 
+                ) &&
                 (
                     this.Title == input.Title ||
                     (this.Title != null &&
                     this.Title.Equals(input.Title))
-                ) && 
+                ) &&
                 (
                     this.Author == input.Author ||
                     (this.Author != null &&
                     this.Author.Equals(input.Author))
-                ) && 
+                ) &&
                 (
                     this.Price == input.Price ||
                     this.Price.Equals(input.Price)
-                ) && 
+                ) &&
                 (
                     this.Genres == input.Genres ||
                     this.Genres != null &&
@@ -3792,11 +3787,11 @@ namespace WPF.Reader.Model
             {
                 return false;
             }
-            return 
+            return
                 (
                     this.Id == input.Id ||
                     this.Id.Equals(input.Id)
-                ) && 
+                ) &&
                 (
                     this.Name == input.Name ||
                     (this.Name != null &&
@@ -3830,7 +3825,7 @@ namespace WPF.Reader.Model
             // Name (string) minLength
             if (this.Name != null && this.Name.Length < 1)
             {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Name, length must be greater than 1.", new [] { "Name" });
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Name, length must be greater than 1.", new[] { "Name" });
             }
             yield break;
         }

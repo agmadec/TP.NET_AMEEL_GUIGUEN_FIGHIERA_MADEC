@@ -7,22 +7,19 @@
 <div class="listeGenres">
     <h1>Liste des Genres:</h1>
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
+    <div style="display: flex;flex-direction: column;width:60%;">
     @foreach (var genre in Model)
     {
-        <tr>
-            <td>
-                <a href="/Book/List?genre=@genre.Id">
-                <p>@genre.Name</p>
-                </a>
-            </td>
-            <td>
-                <form asp-controller="Genre" asp-action="Delete">
-                    <button type="submit" value="@genre.Id" name="id">Supprimer</button>
-                </form>
-            </td>
-        </tr>
-        
+        <div style="display: flex;flex-direction: row;justify-content: space-between;">
+             <a href="/Book/List?genre=@genre.Id">
+             <p>@genre.Name</p>
+             </a>
+             <form asp-controller="Genre" asp-action="Delete">
+                 <button type="submit" value="@genre.Id" name="id">Supprimer</button>
+             </form>
+        </div>
     }
+    </div>
     
 </div>
 

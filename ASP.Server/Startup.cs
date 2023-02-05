@@ -1,14 +1,14 @@
+using ASP.Server.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using ASP.Server.Database;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Threading.Tasks;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace ASP.Server
 {
@@ -25,7 +25,7 @@ namespace ASP.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LibraryDbContext>(options => options.UseInMemoryDatabase("LibraryDatabase"));
-            services.AddControllersWithViews().AddNewtonsoftJson().AddRazorRuntimeCompilation();;
+            services.AddControllersWithViews().AddNewtonsoftJson().AddRazorRuntimeCompilation(); ;
             services.AddSwaggerDocument();
             services.AddMvc(options =>
             {
@@ -56,7 +56,7 @@ namespace ASP.Server
                 var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName).FirstValue;
 
                 float value = 0;
-                if(float.TryParse(valueProviderResult, NumberStyles.Float ,CultureInfo.InvariantCulture, out value))
+                if (float.TryParse(valueProviderResult, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
                 {
                     bindingContext.Result = ModelBindingResult.Success(value);
                 }
@@ -65,7 +65,7 @@ namespace ASP.Server
                             bindingContext.ModelName,
                             "Could not parse value.");
                 return Task.CompletedTask;
-            }    
+            }
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder ASP_Server, IWebHostEnvironment env)

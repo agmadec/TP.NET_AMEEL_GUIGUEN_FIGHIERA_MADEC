@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Xml.Linq;
+﻿using System.Collections.ObjectModel;
 using WPF.Reader.Api;
 using WPF.Reader.Model;
-using WPF.Reader.Pages;
 
 namespace WPF.Reader.Service
 {
@@ -20,7 +16,7 @@ namespace WPF.Reader.Service
         public ObservableCollection<Genre> Local_Genres { get; set; } = new ObservableCollection<Genre>();
 
         public ObservableCollection<BookWithoutContent> Books { get; set; } = new();
-        public ObservableCollection<Genre> Genres { get ; set; } = new();
+        public ObservableCollection<Genre> Genres { get; set; } = new();
 
         public LibraryService()
         {

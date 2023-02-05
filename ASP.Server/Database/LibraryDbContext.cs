@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ASP.Server.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ASP.Server.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP.Server.Database
 {
@@ -15,7 +11,7 @@ namespace ASP.Server.Database
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genre { get; internal set; }
-      
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
